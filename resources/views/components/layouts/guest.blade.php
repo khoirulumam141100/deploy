@@ -5,8 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description"
+        content="PADRP ASSYUKRO - Platform digital untuk mengelola organisasi Persatuan Anak Daerah, Pesantren, dan Rantau secara transparan, modern, dan efisien.">
 
-    <title>{{ $title ?? 'Login' }} - {{ config('app.name', 'PADRP ASSYUKRO') }}</title>
+    <title>{{ $title ?? 'Login' }} | PADRP ASSYUKRO</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
