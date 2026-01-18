@@ -2,7 +2,7 @@
     <!-- Page Header with Actions -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
-            <p class="text-gray-600">Kelola kegiatan dan acara PADRP ASSYUKRO</p>
+            <p class="text-gray-600">Kelola kegiatan dan acara RT/RW Kauman</p>
         </div>
         <a href="{{ route('admin.events.create') }}" class="btn-primary">
             <span>+</span>

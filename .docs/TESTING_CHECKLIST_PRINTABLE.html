@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist Pengujian Sistem - Kauman</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+            color: #1f2937;
+            max-width: 210mm; /* A4 width */
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #111827;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header p {
+            color: #6b7280;
+            margin: 5px 0 0;
+        }
+
+        .module-title {
+            background-color: #f3f4f6;
+            padding: 10px 15px;
+            border-left: 5px solid #059669; /* Emerald 600 */
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-size: 16px;
+            color: #111827;
+            border-radius: 0 4px 4px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #d1d5db;
+            padding: 10px;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            text-align: left;
+            color: #374151;
+        }
+
+        /* Column widths */
+        th:nth-child(1) { width: 5%; text-align: center; } /* ID */
+        th:nth-child(2) { width: 40%; } /* Skenario & Langkah */
+        th:nth-child(3) { width: 35%; } /* Ekspektasi */
+        th:nth-child(4) { width: 20%; text-align: center; } /* Status */
+
+        .checkbox-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .square {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #9ca3af;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .status-pass .square { border-color: #059669; }
+        .status-fail .square { border-color: #dc2626; }
+
+        .note-area {
+            margin-top: 5px;
+            border-top: 1px dashed #e5e7eb;
+            padding-top: 5px;
+            font-size: 11px;
+            color: #9ca3af;
+            font-style: italic;
+            height: 20px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        @media print {
+            body { padding: 0; }
+            .no-print { display: none; }
+            table { page-break-inside: auto; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
+        }
+
+        .btn-print {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <a href="javascript:window.print()" class="btn-print no-print">🖨️ Simpan sebagai PDF</a>
+
+    <div class="header">
+        <h1>Checklist Pengujian Sistem (UAT)</h1>
+        <p>Sistem Informasi Warga Dusun Kauman</p>
+        <p style="font-size: 12px; margin-top: 5px;">Tanggal Pengujian: ____________________ | Penguji: ____________________</p>
+    </div>
+
+    <!-- MODULE 1: AUTH -->
+    <div class="module-title">1. Modul Autentikasi & Registrasi</div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Skenario & Langkah Pengujian</th>
+                <th>Ekspektasi Hasil</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td align="center">AUTH-01</td>
+                <td>
+                    <strong>Registrasi Warga</strong><br>
+                    Isi form pendaftaran lengkap dengan memilih RT dan RW yang sesuai.
+                </td>
+                <td>
+                    ✅ Redirect ke dashboard.<br>
+                    ✅ Data user tersimpan di DB.<br>
+                    ✅ Header form bersih (No emoji rumah).
+                </td>
+                <td>
+                    <div class="checkbox-wrapper">
+                        <div class="checkbox-label status-pass"><span class="square"></span> Sesuai</div>
+                        <div class="checkbox-label status-fail"><span class="square"></span> Gagal</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">AUTH-02</td>
+                <td>
+                    <strong>Validasi Register</strong><br>
+                    Kosongkan field wajib dan tekan Register.
+                </td>
+                <td>
+                    ✅ Muncul pesan error validasi.<br>
+                    ✅ Tidak terjadi error 500.
+                </td>
+                <td>
+                    <div class="checkbox-wrapper">
+                        <div class="checkbox-label status-pass"><span class="square"></span> Sesuai</div>
+                        <div class="checkbox-label status-fail"><span class="square"></span> Gagal</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">AUTH-03</td>
+                <td>
+                    <strong>Login Warga & Admin</strong><br>
+                    Login dengan akun Warga dan Akun Admin secara bergantian.
+                </td>
+                <td>
+                    ✅ Berhasil masuk ke dashboard masing-masing.<br>
+                    ✅ Menu navigasi sesuai role.
+                </td>
+                <td>
+                    <div class="checkbox-wrapper">
+                        <div class="checkbox-label status-pass"><span class="square"></span> Sesuai</div>
+                        <div class="checkbox-label status-fail"><span class="square"></span> Gagal</div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- MODULE 2: WASTE BANK -->
+    <div class="module-title">2. Modul Bank Sampah (Core Features)</div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Skenario & Langkah Pengujian</th>
+                <th>Ekspektasi Hasil</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td align="center">BS-01</td>
+                <td>
+                    <strong>Tambah Jenis Sampah (Admin)</strong><br>
+                    Menu "Jenis Sampah" -> Tambah. Cek form input.
+                </td>
+                <td>
+                    ✅ Form bersih (Tidak ada input Icon/Emoji).<br>
+                    ✅ Input "Satuan" berupa Dropdown.<br>
+                    ✅ Berhasil simpan.
+                </td>
+                <td>
+                    <div class="checkbox-wrapper">
+                        <div class="checkbox-label status-pass"><span class="square"></span> Sesuai</div>
+                        <div class="checkbox-label status-fail"><span class="square"></span> Gagal</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">BS-02</td>
+                <td>
+                    <strong>Edit Jenis Sampah (Admin)</strong><br>
+                    Klik tombol Edit pada salah satu jenis sampah.
+                </td>
+                <td>
+                    ✅ Modal Edit muncul normal (Blur background).<br>
+                    ✅ TIDAK muncul layar hitam blok.<br>
+                    ✅ Perubahan tersimpan.
+                </td>
+                <td>
+                    <div class="checkbox-wrapper">
+                        <div class="checkbox-label status-pass"><span class="square"></span> Sesuai</div>
+                        <div class="checkbox-label status-fail"><span class="square"></span> Gagal</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">BS-04</td>
+                <td>
+                    <strong>Catat Setoran (Admin)</strong><br>
+                    Menu "Setoran" -> Catat Baru. Pilih warga, jenis, berat.
+                </td>
+                <td>
+                    ✅ Transaksi tersimpan tanpa Error 500.<br>
+                    ✅ Saldo warga bertambah otomatis.<br>
+                    ✅ Form input bersih (No emoji)
+                </td>
+                <td>
+                    <div class="checkbox-wrapper">
+                        <div class="checkbox-label status-pass"><span class="square"></span> Sesuai</div>
+                        <div class="checkbox-label status-fail"><span class="square"></span> Gagal</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">BS-07</td>
+                <td>
+                    <strong>Ajukan Penukaran (Warga)</strong><br>
+                    Menu "Tukar Saldo". Isi jumlah dan kirim.
+                </td>
+                <td>
+                    ✅ Input jumlah rapi (Prefix "Rp" tidak menabrak angka).<br>
+                    ✅ Status pengajuan "Menunggu".
+                </td>
+                <td>
+                    <div class="checkbox-wrapper">
+                        <div class="checkbox-label status-pass"><span class="square"></span> Sesuai</div>
+                        <div class="checkbox-label status-fail"><span class="square"></span> Gagal</div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="page-break-before: always;"></div>
+
+    <!-- MODULE 3: FINANCE -->
+    <div class="module-title">3. Modul Keuangan RT (Transparansi)</div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Skenario & Langkah Pengujian</th>
+                <th>Ekspektasi Hasil</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td align="center">FIN-01</td>
+                <td>
+                    <strong>Ringkasan Keuangan</strong><br>
+                    Warga: Buka menu "Keuangan RT".
+                </td>
+                <td>
+                    ✅ Tampil Total Saldo & Transaksi Terbaru.<br>
+                    ✅ Layout bersih (Tidak ada emoji kategori di tabel).
+                </td>
+                <td>
+                    <div class="checkbox-wrapper">
+                        <div class="checkbox-label status-pass"><span class="square"></span> Sesuai</div>
+                        <div class="checkbox-label status-fail"><span class="square"></span> Gagal</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">FIN-02</td>
+                <td>
+                    <strong>Detail Kategori (Fix)</strong><br>
+                    Klik salah satu kategori keuangan (misal: "Kas RT").
+                </td>
+                <td>
+                    ✅ Kolom "Jumlah" tampil benar (Contoh: `Rp 200.000`).<br>
+                    ✅ TIDAK ADA double prefix (misal `++Rp` atau `--Rp`).
+                </td>
+                <td>
+                    <div class="checkbox-wrapper">
+                        <div class="checkbox-label status-pass"><span class="square"></span> Sesuai</div>
+                        <div class="checkbox-label status-fail"><span class="square"></span> Gagal</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">FIN-03</td>
+                <td>
+                    <strong>Filter & Reset (Fix)</strong><br>
+                    Di halaman detail, filter bulan lalu coba Reset.
+                </td>
+                <td>
+                    ✅ Tombol Reset muncul.<br>
+                    ✅ Posisi tombol Reset SEJAJAR rapi dengan input.<br>
+                    ✅ Fungsi reset berjalan.
+                </td>
+                <td>
+                    <div class="checkbox-wrapper">
+                        <div class="checkbox-label status-pass"><span class="square"></span> Sesuai</div>
+                        <div class="checkbox-label status-fail"><span class="square"></span> Gagal</div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- MODULE 4: EVENTS -->
+    <div class="module-title">4. Modul Kegiatan (Events)</div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Skenario & Langkah Pengujian</th>
+                <th>Ekspektasi Hasil</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td align="center">EVT-01</td>
+                <td>
+                    <strong>Filter Kegiatan (Fix)</strong><br>
+                    Klik filter "Mendatang" dan "Selesai".
+                </td>
+                <td>
+                    ✅ Tombol aktif berwarna Hijau solid.<br>
+                    ✅ Tombol tidak aktif berupa Outline.<br>
+                    ✅ Teks tombol bersih (No emoji).
+                </td>
+                <td>
+                    <div class="checkbox-wrapper">
+                        <div class="checkbox-label status-pass"><span class="square"></span> Sesuai</div>
+                        <div class="checkbox-label status-fail"><span class="square"></span> Gagal</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">EVT-02</td>
+                <td>
+                    <strong>Tampilan Grid</strong><br>
+                    Lihat kartu-kartu kegiatan.
+                </td>
+                <td>
+                    ✅ Ikon waktu & lokasi berupa SVG (Vector) halus.<br>
+                    ✅ Bukan emoji kasar.<br>
+                    ✅ Layout kartu rapi.
+                </td>
+                <td>
+                    <div class="checkbox-wrapper">
+                        <div class="checkbox-label status-pass"><span class="square"></span> Sesuai</div>
+                        <div class="checkbox-label status-fail"><span class="square"></span> Gagal</div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Dibuat otomatis oleh Asisten AI untuk User Acceptance Testing (UAT).
+    </div>
+
+</body>
+</html>

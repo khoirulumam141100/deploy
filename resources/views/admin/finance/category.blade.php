@@ -54,8 +54,8 @@
                     <select name="type" id="typeSelect" class="form-select">
                         <option value="">Semua Tipe</option>
                         @foreach($types as $type)
-                            <option value="{{ $type['value'] }}" {{ request('type') === $type['value'] ? 'selected' : '' }}>
-                                {{ $type['label'] }}
+                            <option value="{{ $type->value }}" {{ request('type') === $type->value ? 'selected' : '' }}>
+                                {{ $type->label() }}
                             </option>
                         @endforeach
                     </select>

@@ -14,106 +14,116 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::where('email', 'admin@gmail.com')->first();
+        $admin = User::where('email', 'admin@kauman.id')->first();
 
         if (!$admin) {
+            $this->command->warn('⚠️ Admin tidak ditemukan. Jalankan AdminSeeder terlebih dahulu.');
             return;
         }
 
         $events = [
-            // Completed Events (Past - earlier in 2025)
+            // Completed Events (Past)
             [
-                'title' => 'Rapat Kerja Tahunan 2025',
-                'description' => 'Rapat kerja tahunan membahas program kerja PADRP ASSYUKRO tahun 2025. Agenda meliputi evaluasi program tahun sebelumnya, penyusunan anggaran, dan pembagian tugas pengurus.',
-                'event_date' => '2025-01-15',
+                'title' => 'Rapat RT/RW Awal Tahun',
+                'description' => 'Rapat koordinasi seluruh RT/RW Dusun Kauman membahas program kerja tahun 2026. Agenda meliputi evaluasi tahun sebelumnya dan penyusunan rencana kerja.',
+                'event_date' => '2026-01-05',
                 'start_time' => '09:00',
                 'end_time' => '12:00',
-                'location' => 'Aula Balai Desa',
+                'location' => 'Balai Dusun Kauman',
                 'status' => EventStatus::COMPLETED,
             ],
             [
-                'title' => 'Pengajian Akbar Awal Tahun',
-                'description' => 'Pengajian akbar dalam rangka menyambut tahun baru dengan tema "Muhasabah Diri dan Persiapan Tahun Baru". Pembicara: Ustadz H. Ahmad Fauzi.',
-                'event_date' => '2025-01-28',
+                'title' => 'Pengajian Akbar Tahun Baru',
+                'description' => 'Pengajian akbar dalam rangka menyambut tahun baru dengan tema "Muhasabah Diri". Pembicara: Ustadz H. Ahmad Fauzi.',
+                'event_date' => '2026-01-08',
                 'start_time' => '19:00',
                 'end_time' => '22:00',
-                'location' => 'Masjid Al-Ikhlas',
+                'location' => 'Masjid Al-Ikhlas Kauman',
                 'status' => EventStatus::COMPLETED,
             ],
             [
-                'title' => 'Kegiatan Bakti Sosial',
-                'description' => 'Pembagian sembako dan santunan kepada warga kurang mampu di sekitar desa. Kegiatan ini rutin dilakukan setiap awal bulan.',
-                'event_date' => '2025-02-05',
-                'start_time' => '08:00',
+                'title' => 'Kerja Bakti Bersih Lingkungan',
+                'description' => 'Kegiatan kerja bakti membersihkan lingkungan RT/RW. Warga diharapkan membawa peralatan kebersihan masing-masing.',
+                'event_date' => '2026-01-09',
+                'start_time' => '07:00',
                 'end_time' => '11:00',
-                'location' => 'Sekretariat PADRP ASSYUKRO',
-                'status' => EventStatus::COMPLETED,
-            ],
-            [
-                'title' => 'Pertemuan Rutin Mingguan',
-                'description' => 'Pertemuan rutin anggota membahas perkembangan organisasi dan rencana kegiatan minggu depan.',
-                'event_date' => '2025-02-12',
-                'start_time' => '19:30',
-                'end_time' => '21:30',
-                'location' => 'Rumah Ketua RT 05',
+                'location' => 'Seluruh Area RT/RW Kauman',
                 'status' => EventStatus::COMPLETED,
             ],
 
             // Ongoing Event (Today)
             [
-                'title' => 'Olahraga Bersama Sekarang',
-                'description' => 'Kegiatan olahraga bersama anggota PADRP ASSYUKRO untuk menjaga kesehatan dan mempererat silaturahmi. Olahraga: Senam pagi dan jalan sehat.',
+                'title' => 'Posyandu Balita Bulanan',
+                'description' => 'Kegiatan posyandu balita rutin bulanan. Layanan meliputi penimbangan, imunisasi, dan konsultasi gizi.',
                 'event_date' => now()->toDateString(),
-                'start_time' => '06:00',
-                'end_time' => '08:00',
-                'location' => 'Lapangan Desa',
+                'start_time' => '08:00',
+                'end_time' => '12:00',
+                'location' => 'Pos Posyandu RT 03',
                 'status' => EventStatus::ONGOING,
             ],
 
             // Upcoming Events (Future)
             [
-                'title' => 'Pengajian Rutin Bulanan',
-                'description' => 'Pengajian rutin bulanan dengan tema "Menjaga Keharmonisan Keluarga". Wajib dihadiri seluruh anggota dan keluarga.',
+                'title' => 'Pengajian Rutin Mingguan',
+                'description' => 'Pengajian rutin mingguan dengan tema "Menjaga Keharmonisan Keluarga". Terbuka untuk seluruh warga.',
                 'event_date' => now()->addDays(3)->toDateString(),
                 'start_time' => '19:00',
                 'end_time' => '21:00',
-                'location' => 'Masjid Al-Ikhlas',
+                'location' => 'Masjid Al-Ikhlas Kauman',
                 'status' => EventStatus::UPCOMING,
             ],
             [
-                'title' => 'Gotong Royong Bersih Desa',
-                'description' => 'Kegiatan gotong royong membersihkan lingkungan desa dalam rangka menyambut bulan Ramadhan. Diharapkan partisipasi penuh seluruh anggota.',
+                'title' => 'Senam Sehat Bersama',
+                'description' => 'Kegiatan senam sehat bersama untuk warga. Instruktur dari Puskesmas Kecamatan.',
+                'event_date' => now()->addDays(5)->toDateString(),
+                'start_time' => '06:00',
+                'end_time' => '08:00',
+                'location' => 'Lapangan Dusun Kauman',
+                'status' => EventStatus::UPCOMING,
+            ],
+            [
+                'title' => 'Rapat Bulanan RT/RW',
+                'description' => 'Rapat bulanan membahas perkembangan lingkungan dan rencana kegiatan bulan depan.',
                 'event_date' => now()->addDays(7)->toDateString(),
-                'start_time' => '07:00',
-                'end_time' => '11:00',
-                'location' => 'Seluruh Area Desa',
+                'start_time' => '19:30',
+                'end_time' => '21:30',
+                'location' => 'Balai Dusun Kauman',
                 'status' => EventStatus::UPCOMING,
             ],
             [
-                'title' => 'Pelatihan Keterampilan',
-                'description' => 'Pelatihan keterampilan membuat kerajinan tangan dari bahan daur ulang. Narasumber dari Dinas UKM Kabupaten.',
+                'title' => 'Pelatihan Bank Sampah',
+                'description' => 'Pelatihan pengelolaan bank sampah untuk warga. Narasumber dari Dinas Lingkungan Hidup.',
                 'event_date' => now()->addDays(14)->toDateString(),
                 'start_time' => '09:00',
-                'end_time' => '15:00',
-                'location' => 'Balai Desa',
+                'end_time' => '12:00',
+                'location' => 'Balai Dusun Kauman',
                 'status' => EventStatus::UPCOMING,
             ],
             [
-                'title' => 'Santunan Anak Yatim',
-                'description' => 'Kegiatan santunan untuk anak yatim di wilayah desa. Dana dari pengumpulan donasi anggota dan masyarakat.',
+                'title' => 'Arisan Ibu-ibu PKK',
+                'description' => 'Kegiatan arisan rutin ibu-ibu PKK RT/RW Kauman.',
+                'event_date' => now()->addDays(10)->toDateString(),
+                'start_time' => '14:00',
+                'end_time' => '16:00',
+                'location' => 'Rumah Ibu Ketua PKK',
+                'status' => EventStatus::UPCOMING,
+            ],
+            [
+                'title' => 'Bakti Sosial Santunan Yatim',
+                'description' => 'Kegiatan santunan untuk anak yatim di wilayah RW. Dana dari pengumpulan donasi warga.',
                 'event_date' => now()->addDays(21)->toDateString(),
                 'start_time' => '10:00',
                 'end_time' => '12:00',
-                'location' => 'Aula Masjid Al-Ikhlas',
+                'location' => 'Masjid Al-Ikhlas Kauman',
                 'status' => EventStatus::UPCOMING,
             ],
             [
-                'title' => 'Musyawarah Besar PADRP',
-                'description' => 'Musyawarah besar membahas perkembangan organisasi dan rencana program semester kedua. Seluruh anggota wajib hadir.',
-                'event_date' => now()->addDays(30)->toDateString(),
-                'start_time' => '08:00',
-                'end_time' => '14:00',
-                'location' => 'Aula Kecamatan',
+                'title' => 'Ronda Malam Bersama',
+                'description' => 'Kegiatan ronda malam bersama warga untuk menjaga keamanan lingkungan.',
+                'event_date' => now()->addDays(2)->toDateString(),
+                'start_time' => '22:00',
+                'end_time' => '05:00',
+                'location' => 'Pos Ronda RT 04',
                 'status' => EventStatus::UPCOMING,
             ],
         ];
@@ -124,5 +134,7 @@ class EventSeeder extends Seeder
                 'created_by' => $admin->id,
             ]);
         }
+
+        $this->command->info('✅ Kegiatan berhasil di-seed! (' . count($events) . ' kegiatan)');
     }
 }

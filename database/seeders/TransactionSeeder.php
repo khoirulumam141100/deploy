@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\TransactionType;
 use App\Models\Category;
+use App\Models\Rt;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -15,90 +16,96 @@ class TransactionSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::where('email', 'admin@gmail.com')->first();
+        $admin = User::where('email', 'admin@kauman.id')->first();
 
         if (!$admin) {
+            $this->command->warn('⚠️ Admin tidak ditemukan. Jalankan AdminSeeder terlebih dahulu.');
             return;
         }
 
         $categories = Category::all();
+        $rts = Rt::all();
 
-        // Sample transactions for each category
-        $transactions = [
-            // Kas Assyukro
-            [
-                'category_slug' => 'kas-assyukro',
-                'transactions' => [
-                    ['type' => TransactionType::INCOME, 'amount' => 5000000, 'description' => 'Iuran Anggota Bulan Januari', 'date' => '2025-01-05'],
-                    ['type' => TransactionType::INCOME, 'amount' => 3000000, 'description' => 'Donasi dari Warga Desa', 'date' => '2025-01-10'],
-                    ['type' => TransactionType::EXPENSE, 'amount' => 500000, 'description' => 'Pembelian ATK Organisasi', 'date' => '2025-01-15'],
-                    ['type' => TransactionType::EXPENSE, 'amount' => 750000, 'description' => 'Biaya Listrik dan Air', 'date' => '2025-01-20'],
-                    ['type' => TransactionType::INCOME, 'amount' => 2500000, 'description' => 'Iuran Anggota Bulan Februari', 'date' => '2025-02-05'],
-                    ['type' => TransactionType::EXPENSE, 'amount' => 1200000, 'description' => 'Renovasi Sekretariat', 'date' => '2025-02-10'],
-                    ['type' => TransactionType::INCOME, 'amount' => 1000000, 'description' => 'Sumbangan Haji Ahmad', 'date' => '2025-02-15'],
-                    ['type' => TransactionType::INCOME, 'amount' => 4500000, 'description' => 'Iuran Anggota Bulan Maret', 'date' => '2025-03-05'],
-                    ['type' => TransactionType::EXPENSE, 'amount' => 800000, 'description' => 'Pembelian Proyektor', 'date' => '2025-03-12'],
-                    ['type' => TransactionType::INCOME, 'amount' => 2000000, 'description' => 'Dana Bantuan Pemerintah Desa', 'date' => '2025-03-20'],
-                ],
+        if ($rts->isEmpty()) {
+            $this->command->warn('⚠️ Tidak ada data RT. Jalankan RwRtSeeder terlebih dahulu.');
+            return;
+        }
+
+        // Transactions per RT per category
+        $transactionTemplates = [
+            // Kas RT
+            'kas-rt' => [
+                ['type' => TransactionType::INCOME, 'amount' => 5000000, 'description' => 'Iuran Warga Bulan Januari'],
+                ['type' => TransactionType::INCOME, 'amount' => 3000000, 'description' => 'Donasi dari Warga'],
+                ['type' => TransactionType::EXPENSE, 'amount' => 500000, 'description' => 'Pembelian ATK'],
+                ['type' => TransactionType::EXPENSE, 'amount' => 750000, 'description' => 'Biaya Listrik Pos'],
+                ['type' => TransactionType::INCOME, 'amount' => 4500000, 'description' => 'Iuran Warga Bulan Februari'],
             ],
-            // Rutinan Mingguan
-            [
-                'category_slug' => 'rutinan-mingguan',
-                'transactions' => [
-                    ['type' => TransactionType::INCOME, 'amount' => 350000, 'description' => 'Iuran Rutinan Minggu Ke-1 Januari', 'date' => '2025-01-04'],
-                    ['type' => TransactionType::INCOME, 'amount' => 400000, 'description' => 'Iuran Rutinan Minggu Ke-2 Januari', 'date' => '2025-01-11'],
-                    ['type' => TransactionType::EXPENSE, 'amount' => 150000, 'description' => 'Konsumsi Rapat Rutin', 'date' => '2025-01-11'],
-                    ['type' => TransactionType::INCOME, 'amount' => 375000, 'description' => 'Iuran Rutinan Minggu Ke-3 Januari', 'date' => '2025-01-18'],
-                    ['type' => TransactionType::EXPENSE, 'amount' => 200000, 'description' => 'Transportasi Pengurus', 'date' => '2025-01-20'],
-                    ['type' => TransactionType::INCOME, 'amount' => 425000, 'description' => 'Iuran Rutinan Minggu Ke-4 Januari', 'date' => '2025-01-25'],
-                    ['type' => TransactionType::INCOME, 'amount' => 500000, 'description' => 'Iuran Rutinan Februari Minggu Ke-1', 'date' => '2025-02-01'],
-                    ['type' => TransactionType::EXPENSE, 'amount' => 175000, 'description' => 'Konsumsi Rapat Rutin', 'date' => '2025-02-08'],
-                    ['type' => TransactionType::INCOME, 'amount' => 450000, 'description' => 'Iuran Rutinan Februari Minggu Ke-2', 'date' => '2025-02-08'],
-                ],
+            // Dana Sosial
+            'dana-sosial' => [
+                ['type' => TransactionType::INCOME, 'amount' => 2000000, 'description' => 'Sumbangan Dana Sosial'],
+                ['type' => TransactionType::EXPENSE, 'amount' => 500000, 'description' => 'Bantuan Warga Sakit'],
+                ['type' => TransactionType::EXPENSE, 'amount' => 1000000, 'description' => 'Santunan Duka Cita'],
+                ['type' => TransactionType::INCOME, 'amount' => 1500000, 'description' => 'Donasi untuk Dana Sosial'],
             ],
-            // Rutinan Bulanan
-            [
-                'category_slug' => 'rutinan-bulanan',
-                'transactions' => [
-                    ['type' => TransactionType::INCOME, 'amount' => 1500000, 'description' => 'Iuran Bulanan Januari', 'date' => '2025-01-01'],
-                    ['type' => TransactionType::EXPENSE, 'amount' => 300000, 'description' => 'Kegiatan Pengajian Bulanan', 'date' => '2025-01-15'],
-                    ['type' => TransactionType::INCOME, 'amount' => 1750000, 'description' => 'Iuran Bulanan Februari', 'date' => '2025-02-01'],
-                    ['type' => TransactionType::EXPENSE, 'amount' => 450000, 'description' => 'Kegiatan Pengajian Bulanan + Tausiyah', 'date' => '2025-02-15'],
-                    ['type' => TransactionType::INCOME, 'amount' => 1600000, 'description' => 'Iuran Bulanan Maret', 'date' => '2025-03-01'],
-                    ['type' => TransactionType::EXPENSE, 'amount' => 500000, 'description' => 'Bakti Sosial Bulanan', 'date' => '2025-03-10'],
-                    ['type' => TransactionType::INCOME, 'amount' => 800000, 'description' => 'Sumbangan Sukarela', 'date' => '2025-03-15'],
-                ],
+            // Keuangan Kegiatan
+            'keuangan-kegiatan' => [
+                ['type' => TransactionType::INCOME, 'amount' => 3000000, 'description' => 'Dana Kegiatan 17 Agustus'],
+                ['type' => TransactionType::EXPENSE, 'amount' => 1500000, 'description' => 'Konsumsi Acara 17 Agustus'],
+                ['type' => TransactionType::EXPENSE, 'amount' => 800000, 'description' => 'Dekorasi dan Perlengkapan'],
+                ['type' => TransactionType::INCOME, 'amount' => 2000000, 'description' => 'Sponsor Kegiatan'],
             ],
-            // Keuangan Idul Fitri
-            [
-                'category_slug' => 'keuangan-idul-fitri',
-                'transactions' => [
-                    ['type' => TransactionType::INCOME, 'amount' => 2000000, 'description' => 'Tabungan Idul Fitri Januari', 'date' => '2025-01-10'],
-                    ['type' => TransactionType::INCOME, 'amount' => 2500000, 'description' => 'Tabungan Idul Fitri Februari', 'date' => '2025-02-10'],
-                    ['type' => TransactionType::INCOME, 'amount' => 3000000, 'description' => 'Tabungan Idul Fitri Maret', 'date' => '2025-03-10'],
-                    ['type' => TransactionType::INCOME, 'amount' => 5000000, 'description' => 'Donasi untuk Kegiatan Idul Fitri', 'date' => '2025-03-15'],
-                    ['type' => TransactionType::EXPENSE, 'amount' => 1500000, 'description' => 'Persiapan Takjil Ramadhan', 'date' => '2025-03-01'],
-                ],
+            // Iuran Kebersihan
+            'iuran-kebersihan' => [
+                ['type' => TransactionType::INCOME, 'amount' => 1000000, 'description' => 'Iuran Kebersihan Januari'],
+                ['type' => TransactionType::EXPENSE, 'amount' => 300000, 'description' => 'Gaji Petugas Kebersihan'],
+                ['type' => TransactionType::EXPENSE, 'amount' => 200000, 'description' => 'Pembelian Alat Kebersihan'],
+                ['type' => TransactionType::INCOME, 'amount' => 1000000, 'description' => 'Iuran Kebersihan Februari'],
+            ],
+            // Dana Keamanan
+            'dana-keamanan' => [
+                ['type' => TransactionType::INCOME, 'amount' => 1500000, 'description' => 'Iuran Keamanan Januari'],
+                ['type' => TransactionType::EXPENSE, 'amount' => 500000, 'description' => 'Honor Petugas Ronda'],
+                ['type' => TransactionType::EXPENSE, 'amount' => 200000, 'description' => 'Konsumsi Ronda'],
+                ['type' => TransactionType::INCOME, 'amount' => 1500000, 'description' => 'Iuran Keamanan Februari'],
+            ],
+            // Bank Sampah
+            'bank-sampah' => [
+                ['type' => TransactionType::INCOME, 'amount' => 500000, 'description' => 'Penjualan Sampah ke Pengepul'],
+                ['type' => TransactionType::INCOME, 'amount' => 750000, 'description' => 'Hasil Penjualan Plastik'],
+                ['type' => TransactionType::EXPENSE, 'amount' => 100000, 'description' => 'Operasional Bank Sampah'],
             ],
         ];
 
-        foreach ($transactions as $categoryData) {
-            $category = $categories->where('slug', $categoryData['category_slug'])->first();
+        $transactionCount = 0;
 
-            if (!$category) {
-                continue;
-            }
+        foreach ($rts as $rt) {
+            foreach ($transactionTemplates as $categorySlug => $transactions) {
+                $category = $categories->where('slug', $categorySlug)->first();
 
-            foreach ($categoryData['transactions'] as $trans) {
-                Transaction::create([
-                    'category_id' => $category->id,
-                    'user_id' => $admin->id,
-                    'type' => $trans['type'],
-                    'amount' => $trans['amount'],
-                    'description' => $trans['description'],
-                    'transaction_date' => $trans['date'],
-                ]);
+                if (!$category) {
+                    continue;
+                }
+
+                foreach ($transactions as $index => $trans) {
+                    // Randomize date within last 3 months
+                    $date = now()->subDays(rand(1, 90))->toDateString();
+
+                    Transaction::create([
+                        'category_id' => $category->id,
+                        'user_id' => $admin->id,
+                        'rt_id' => $rt->id,
+                        'type' => $trans['type'],
+                        'amount' => $trans['amount'] + rand(-100000, 100000), // Add some variance
+                        'description' => $trans['description'] . ' - ' . $rt->name,
+                        'transaction_date' => $date,
+                    ]);
+
+                    $transactionCount++;
+                }
             }
         }
+
+        $this->command->info("✅ Transaksi berhasil di-seed! ({$transactionCount} transaksi)");
     }
 }

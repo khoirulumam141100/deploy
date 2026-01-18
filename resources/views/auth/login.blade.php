@@ -1,11 +1,10 @@
 <x-layouts.guest title="Masuk">
-    <div class="bg-white rounded-2xl shadow-2xl p-8">
-        <!-- Logo -->
+    <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/50">
+        <!-- Header -->
         <div class="text-center mb-8">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo PADRP Assyukro"
-                class="w-20 h-20 mx-auto mb-4 rounded-xl shadow-lg">
-            <h1 class="text-2xl font-bold text-gray-900">Masuk ke Akun</h1>
-            <p class="text-gray-500 mt-1">PADRP ASSYUKRO</p>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">
+                Masuk ke Akun</h1>
+            <p class="text-gray-500 mt-1">Sistem Informasi Warga RT/RW Kauman</p>
         </div>
 
         <!-- Error Message -->
@@ -38,9 +37,17 @@
             <!-- Email -->
             <div>
                 <label for="email" class="form-label">Email</label>
-                <input type="email" id="email" name="email" value="{{ old('email') }}"
-                    class="form-input @error('email') border-red-500 @enderror" placeholder="nama@email.com" required
-                    autofocus>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 flex items-center" style="padding-left: 0.875rem;">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}"
+                        class="form-input @error('email') border-red-500 @enderror" style="padding-left: 2.75rem;" placeholder="nama@email.com" required
+                        autofocus>
+                </div>
                 @error('email')
                     <p class="form-error">{{ $message }}</p>
                 @enderror
@@ -50,8 +57,14 @@
             <div x-data="{ showPassword: false }">
                 <label for="password" class="form-label">Password</label>
                 <div class="relative">
+                    <div class="absolute inset-y-0 left-0 flex items-center" style="padding-left: 0.875rem;">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
                     <input :type="showPassword ? 'text' : 'password'" id="password" name="password"
-                        class="form-input pr-10 @error('password') border-red-500 @enderror" placeholder="••••••••"
+                        class="form-input @error('password') border-red-500 @enderror" style="padding-left: 2.75rem; padding-right: 2.5rem;" placeholder="••••••••"
                         required>
                     <button type="button" @click="showPassword = !showPassword"
                         class="absolute inset-y-0 right-0 flex items-center px-4 text-gray-400 hover:text-gray-600">
@@ -76,24 +89,52 @@
                 @enderror
             </div>
 
+            <!-- Remember Me -->
+            <div class="flex items-center">
+                <input type="checkbox" id="remember" name="remember"
+                    class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500">
+                <label for="remember" class="ml-2 text-sm text-gray-600">Ingat saya</label>
+            </div>
+
             <!-- Submit -->
-            <button type="submit" class="btn-primary w-full py-3 text-base">
-                Masuk
+            <button type="submit"
+                class="btn-primary w-full py-3 text-base flex items-center justify-center gap-2 group">
+                <span>Masuk</span>
+                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
             </button>
         </form>
 
+        <!-- Divider -->
+        <div class="relative my-6">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-200"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+                <span class="px-4 bg-white text-gray-500">atau</span>
+            </div>
+        </div>
+
         <!-- Register Link -->
-        <p class="text-center text-gray-600 mt-6">
+        <p class="text-center text-gray-600">
             Belum punya akun?
-            <a href="{{ route('register') }}" class="text-primary-600 hover:text-primary-700 font-medium">
-                Daftar sekarang
+            <a href="{{ route('register') }}" class="text-green-600 hover:text-green-700 font-semibold hover:underline">
+                Daftar sebagai Warga
             </a>
         </p>
 
         <!-- Back to Home -->
-        <div class="text-center mt-4">
-            <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700">
-                ← Kembali ke Beranda
+        <div class="text-center mt-6">
+            <a href="{{ route('home') }}"
+                class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Kembali ke Beranda
             </a>
         </div>
     </div>

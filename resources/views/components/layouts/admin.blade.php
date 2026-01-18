@@ -6,11 +6,13 @@
             <!-- Logo -->
             <div class="h-16 flex items-center justify-between px-6 border-b border-gray-200">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo PADRP Assyukro"
-                        class="w-10 h-10 rounded-lg object-contain">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-xl flex items-center justify-center">
+                        <span class="text-xl">🏘️</span>
+                    </div>
                     <div>
-                        <div class="font-bold text-gray-900 text-sm">PADRP</div>
-                        <div class="text-xs text-gray-500">ASSYUKRO</div>
+                        <div class="font-bold text-gray-900 text-sm">KAUMAN</div>
+                        <div class="text-xs text-gray-500">Admin Panel</div>
                     </div>
                 </a>
                 <button id="close-sidebar" class="lg:hidden p-2 text-gray-500 hover:text-gray-700">
@@ -36,18 +38,18 @@
 
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 mt-6">Kelola Data</p>
 
-                <a href="{{ route('admin.members.index') }}"
-                    class="sidebar-link {{ request()->routeIs('admin.members.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.residents.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.residents.*') ? 'active' : '' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
-                    <span>Keanggotaan</span>
+                    <span>Data Warga</span>
                     @php
                         $pendingCount = \App\Models\User::pending()->count();
                     @endphp
                     @if($pendingCount > 0)
-                        <span class="ml-auto bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded-full">
+                        <span class="ml-auto bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded-full">
                             {{ $pendingCount }}
                         </span>
                     @endif
@@ -59,7 +61,24 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>Keuangan</span>
+                    <span>Keuangan RT</span>
+                </a>
+
+                <a href="{{ route('admin.waste-bank.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.waste-bank.*') ? 'active' : '' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    <span>Bank Sampah</span>
+                    @php
+                        $pendingRedemptions = \App\Models\WasteRedemption::pending()->count();
+                    @endphp
+                    @if($pendingRedemptions > 0)
+                        <span class="ml-auto bg-emerald-100 text-emerald-800 text-xs font-medium px-2 py-0.5 rounded-full">
+                            {{ $pendingRedemptions }}
+                        </span>
+                    @endif
                 </a>
 
                 <a href="{{ route('admin.events.index') }}"
@@ -129,12 +148,12 @@
                         <button @click="open = !open"
                             class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 transition-colors">
                             <div
-                                class="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
+                                class="w-8 h-8 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
                                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                             </div>
                             <div class="hidden sm:block text-left">
                                 <div class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</div>
-                                <div class="text-xs text-gray-500">{{ auth()->user()->role->label() }}</div>
+                                <div class="text-xs text-gray-500">Administrator</div>
                             </div>
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -162,7 +181,7 @@
             </header>
 
             <!-- Page Content -->
-            <main class="flex-1 p-6">
+            <main class="flex-1 p-6 bg-gray-50">
                 <!-- Flash Messages -->
                 @if(session('success'))
                     <div class="alert-success mb-6 animate-fade-in">
@@ -192,7 +211,7 @@
             <!-- Footer -->
             <footer class="bg-white border-t border-gray-200 px-6 py-4">
                 <p class="text-sm text-gray-500 text-center">
-                    &copy; {{ date('Y') }} PADRP ASSYUKRO. All rights reserved.
+                    &copy; {{ date('Y') }} Kauman - Dusun Kauman, Desa Deras
                 </p>
             </footer>
         </div>

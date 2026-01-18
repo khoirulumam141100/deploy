@@ -13,11 +13,19 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+                // Core structure
+            RwRtSeeder::class,
             CategorySeeder::class,
+            WasteTypeSeeder::class,
+
+                // Users
             AdminSeeder::class,
-            MemberSeeder::class,
+            ResidentSeeder::class,
+
+                // Data
             TransactionSeeder::class,
             EventSeeder::class,
+            WasteDepositSeeder::class,
         ]);
     }
 }

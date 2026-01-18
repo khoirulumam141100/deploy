@@ -81,6 +81,14 @@ class Event extends Model
     }
 
     /**
+     * Scope a query to only include past events (alias for completed).
+     */
+    public function scopePast(Builder $query): Builder
+    {
+        return $query->where('event_date', '<', now()->toDateString());
+    }
+
+    /**
      * Scope a query to only include ongoing events.
      */
     public function scopeOngoing(Builder $query): Builder

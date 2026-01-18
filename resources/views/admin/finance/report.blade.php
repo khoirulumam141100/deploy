@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Keuangan - PADRP ASSYUKRO</title>
+    <title>Laporan Keuangan - Kauman</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @media print {
@@ -69,12 +69,11 @@
         <!-- Kop Surat -->
         <div class="flex items-center justify-between border-b-2 border-gray-900 pb-6 mb-8">
             <div class="flex items-center gap-4">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo PADRP Assyukro"
-                    class="w-16 h-16 rounded-lg object-contain">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo Kauman" class="w-16 h-16 rounded-lg object-contain">
                 <div>
-                    <h1 class="text-2xl font-bold uppercase tracking-wide">PADRP ASSYUKRO</h1>
-                    <p class="text-sm text-gray-600">Persatuan Anak Desa Rantau Panjang Assyukro</p>
-                    <p class="text-xs text-gray-500 mt-1">Jl. Desa Rantau Panjang, Kec. Simpang Hilir, Kab. Kayong Utara
+                    <h1 class="text-2xl font-bold uppercase tracking-wide">DUSUN KAUMAN</h1>
+                    <p class="text-sm text-gray-600">Desa Deras, Kecamatan Ledokombo, Kabupaten Jember</p>
+                    <p class="text-xs text-gray-500 mt-1">Sistem Informasi Komunitas RT/RW</p>
                     </p>
                 </div>
             </div>
@@ -173,7 +172,7 @@
         <!-- Signatures -->
         <div class="grid grid-cols-2 gap-8 mt-16 page-break-inside-avoid">
             <div class="text-center">
-                <p class="mb-20">Mengetahui,<br>Ketua PADRP</p>
+                <p class="mb-20">Mengetahui,<br>Kepala Dusun</p>
                 <div class="border-b border-gray-900 w-48 mx-auto mb-2"></div>
                 <p class="font-bold">( .................................... )</p>
             </div>
@@ -186,7 +185,7 @@
 
         <!-- Printing Footer -->
         <div class="mt-12 text-center text-xs text-gray-400 print:text-gray-500">
-            Dicetak oleh sistem PADRP ASSYUKRO pada {{ now()->format('d/m/Y H:i') }} WIB
+            Dicetak oleh sistem Kauman pada {{ now()->format('d/m/Y H:i') }} WIB
         </div>
 
     </div>

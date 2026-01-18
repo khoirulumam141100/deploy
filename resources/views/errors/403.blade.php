@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>403 - Akses Ditolak | PADRP ASSYUKRO</title>
+    <title>403 - Akses Ditolak | Kauman</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -35,7 +35,7 @@
 
         <!-- Footer -->
         <p class="text-sm text-gray-500 mt-12">
-            &copy; {{ date('Y') }} PADRP ASSYUKRO. All rights reserved.
+            &copy; {{ date('Y') }} Kauman - Dusun Kauman, Desa Deras. All rights reserved.
         </p>
     </div>
 </body>

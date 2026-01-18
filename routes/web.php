@@ -2,14 +2,17 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\ResidentController;
 use App\Http\Controllers\Admin\FinanceController as AdminFinanceController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
-use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
-use App\Http\Controllers\Member\EventController as MemberEventController;
-use App\Http\Controllers\Member\FinanceController as MemberFinanceController;
-use App\Http\Controllers\Member\ProfileController as MemberProfileController;
+use App\Http\Controllers\Admin\WasteBankController as AdminWasteBankController;
+use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Warga\DashboardController as WargaDashboardController;
+use App\Http\Controllers\Warga\EventController as WargaEventController;
+use App\Http\Controllers\Warga\FinanceController as WargaFinanceController;
+use App\Http\Controllers\Warga\ProfileController as WargaProfileController;
+use App\Http\Controllers\Warga\WasteBankController as WargaWasteBankController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,11 +55,11 @@ Route::prefix('admin')
         // Dashboard
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        // Members
-        Route::get('/members/pending', [MemberController::class, 'pending'])->name('members.pending');
-        Route::post('/members/{user}/approve', [MemberController::class, 'approve'])->name('members.approve');
-        Route::post('/members/{user}/reject', [MemberController::class, 'reject'])->name('members.reject');
-        Route::resource('members', MemberController::class);
+        // Residents (sebelumnya Members)
+        Route::get('/residents/pending', [ResidentController::class, 'pending'])->name('residents.pending');
+        Route::post('/residents/{user}/approve', [ResidentController::class, 'approve'])->name('residents.approve');
+        Route::post('/residents/{user}/reject', [ResidentController::class, 'reject'])->name('residents.reject');
+        Route::resource('residents', ResidentController::class);
 
         // Finance
         Route::get('/finance', [AdminFinanceController::class, 'index'])->name('finance.index');
@@ -71,38 +74,73 @@ Route::prefix('admin')
         // Events
         Route::resource('events', AdminEventController::class);
 
+        // Bank Sampah
+        Route::prefix('waste-bank')->name('waste-bank.')->group(function () {
+            Route::get('/', [AdminWasteBankController::class, 'index'])->name('index');
+            Route::get('/deposits', [AdminWasteBankController::class, 'deposits'])->name('deposits');
+            Route::get('/deposits/create', [AdminWasteBankController::class, 'createDeposit'])->name('deposits.create');
+            Route::post('/deposits', [AdminWasteBankController::class, 'storeDeposit'])->name('deposits.store');
+            Route::get('/types', [AdminWasteBankController::class, 'wasteTypes'])->name('types');
+            Route::post('/types', [AdminWasteBankController::class, 'storeWasteType'])->name('types.store');
+            Route::put('/types/{wasteType}', [AdminWasteBankController::class, 'updateWasteType'])->name('types.update');
+            Route::delete('/types/{wasteType}', [AdminWasteBankController::class, 'destroyWasteType'])->name('types.destroy');
+            Route::get('/redemptions', [AdminWasteBankController::class, 'redemptions'])->name('redemptions');
+            Route::put('/redemptions/{redemption}', [AdminWasteBankController::class, 'processRedemption'])->name('redemptions.process');
+        });
+
         // Profile
         Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile');
         Route::patch('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
         Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password');
 
         // Activity Logs
-        Route::get('/activity-logs', [App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('activity-logs.index');
+        Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
     });
 
 /*
 |--------------------------------------------------------------------------
-| Member Routes
+| Warga Routes (sebelumnya Member)
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('warga')
+    ->name('warga.')
+    ->middleware(['auth', 'warga', 'approved'])
+    ->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [WargaDashboardController::class, 'index'])->name('dashboard');
+
+        // Events (read-only)
+        Route::get('/events', [WargaEventController::class, 'index'])->name('events.index');
+        Route::get('/events/{event}', [WargaEventController::class, 'show'])->name('events.show');
+
+        // Finance (read-only - transparency)
+        Route::get('/finance', [WargaFinanceController::class, 'index'])->name('finance.index');
+        Route::get('/finance/category/{category}', [WargaFinanceController::class, 'category'])->name('finance.category');
+
+        // Bank Sampah
+        Route::prefix('waste-bank')->name('waste-bank.')->group(function () {
+            Route::get('/', [WargaWasteBankController::class, 'index'])->name('index');
+            Route::get('/history', [WargaWasteBankController::class, 'history'])->name('history');
+            Route::get('/redeem', [WargaWasteBankController::class, 'redeem'])->name('redeem');
+            Route::post('/redeem', [WargaWasteBankController::class, 'storeRedemption'])->name('redeem.store');
+        });
+
+        // Profile
+        Route::get('/profile', [WargaProfileController::class, 'edit'])->name('profile');
+        Route::patch('/profile', [WargaProfileController::class, 'update'])->name('profile.update');
+        Route::put('/profile/password', [WargaProfileController::class, 'updatePassword'])->name('profile.password');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| Legacy Redirects (untuk backward compatibility)
 |--------------------------------------------------------------------------
 */
 
 Route::prefix('member')
-    ->name('member.')
-    ->middleware(['auth', 'member', 'approved'])
+    ->middleware(['auth'])
     ->group(function () {
-        // Dashboard
-        Route::get('/dashboard', [MemberDashboardController::class, 'index'])->name('dashboard');
-
-        // Events (read-only)
-        Route::get('/events', [MemberEventController::class, 'index'])->name('events.index');
-        Route::get('/events/{event}', [MemberEventController::class, 'show'])->name('events.show');
-
-        // Finance (read-only)
-        Route::get('/finance', [MemberFinanceController::class, 'index'])->name('finance.index');
-        Route::get('/finance/category/{category}', [MemberFinanceController::class, 'category'])->name('finance.category');
-
-        // Profile
-        Route::get('/profile', [MemberProfileController::class, 'edit'])->name('profile');
-        Route::patch('/profile', [MemberProfileController::class, 'update'])->name('profile.update');
-        Route::put('/profile/password', [MemberProfileController::class, 'updatePassword'])->name('profile.password');
+        Route::get('/dashboard', fn() => redirect()->route('warga.dashboard'));
+        Route::get('/{any}', fn() => redirect()->route('warga.dashboard'))->where('any', '.*');
     });

@@ -20,6 +20,7 @@ class Transaction extends Model
     protected $fillable = [
         'category_id',
         'user_id',
+        'rt_id',
         'type',
         'amount',
         'description',
@@ -58,6 +59,14 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get the RT for this transaction.
+     */
+    public function rt(): BelongsTo
+    {
+        return $this->belongsTo(Rt::class);
+    }
+
     // ==================== SCOPES ====================
 
     /**
@@ -82,6 +91,17 @@ class Transaction extends Model
     public function scopeByCategory(Builder $query, int $categoryId): Builder
     {
         return $query->where('category_id', $categoryId);
+    }
+
+    /**
+     * Scope a query to filter by RT.
+     */
+    public function scopeByRt(Builder $query, ?int $rtId): Builder
+    {
+        if (!$rtId) {
+            return $query;
+        }
+        return $query->where('rt_id', $rtId);
     }
 
     /**
@@ -157,5 +177,21 @@ class Transaction extends Model
             $this->type->icon(),
             $this->type->label()
         );
+    }
+
+    /**
+     * Get formatted transaction date.
+     */
+    public function getFormattedDateAttribute(): string
+    {
+        return $this->transaction_date->translatedFormat('d F Y');
+    }
+
+    /**
+     * Get RT name or dash if not set.
+     */
+    public function getRtNameAttribute(): string
+    {
+        return $this->rt?->full_name ?? 'Umum';
     }
 }

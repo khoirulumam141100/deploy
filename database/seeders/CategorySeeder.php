@@ -14,32 +14,46 @@ class CategorySeeder extends Seeder
     {
         $categories = [
             [
-                'name' => 'Kas Assyukro',
-                'slug' => 'kas-assyukro',
-                'description' => 'Keuangan utama organisasi PADRP ASSYUKRO',
+                'name' => 'Kas RT',
+                'slug' => 'kas-rt',
+                'description' => 'Dana utama RT dari iuran warga',
                 'icon' => '💰',
                 'color' => 'teal',
             ],
             [
-                'name' => 'Rutinan Mingguan',
-                'slug' => 'rutinan-mingguan',
-                'description' => 'Dana untuk kegiatan rutin setiap minggu',
-                'icon' => '📆',
-                'color' => 'green',
+                'name' => 'Dana Sosial',
+                'slug' => 'dana-sosial',
+                'description' => 'Dana untuk bantuan warga (sakit, duka, dll)',
+                'icon' => '🤝',
+                'color' => 'blue',
             ],
             [
-                'name' => 'Rutinan Bulanan',
-                'slug' => 'rutinan-bulanan',
-                'description' => 'Dana untuk kegiatan rutin setiap bulan',
+                'name' => 'Keuangan Kegiatan',
+                'slug' => 'keuangan-kegiatan',
+                'description' => 'Anggaran untuk acara dan kegiatan RT/RW',
                 'icon' => '📅',
                 'color' => 'purple',
             ],
             [
-                'name' => 'Keuangan Idul Fitri',
-                'slug' => 'keuangan-idul-fitri',
-                'description' => 'Dana khusus untuk kegiatan Idul Fitri',
-                'icon' => '🌙',
-                'color' => 'yellow',
+                'name' => 'Iuran Kebersihan',
+                'slug' => 'iuran-kebersihan',
+                'description' => 'Dana untuk sampah dan kebersihan lingkungan',
+                'icon' => '🧹',
+                'color' => 'green',
+            ],
+            [
+                'name' => 'Dana Keamanan',
+                'slug' => 'dana-keamanan',
+                'description' => 'Dana untuk ronda dan satpam lingkungan',
+                'icon' => '🛡️',
+                'color' => 'orange',
+            ],
+            [
+                'name' => 'Bank Sampah',
+                'slug' => 'bank-sampah',
+                'description' => 'Pendapatan dari pengelolaan bank sampah',
+                'icon' => '♻️',
+                'color' => 'emerald',
             ],
         ];
 
@@ -49,5 +63,7 @@ class CategorySeeder extends Seeder
                 $category
             );
         }
+
+        $this->command->info('✅ Kategori keuangan berhasil di-seed! (' . count($categories) . ' kategori)');
     }
 }

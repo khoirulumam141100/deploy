@@ -40,24 +40,45 @@
                     <div class="grid grid-cols-2 gap-4 mt-2">
                         @foreach($types as $type)
                             <label class="relative cursor-pointer">
-                                <input 
-                                    type="radio" 
-                                    name="type" 
-                                    value="{{ $type['value'] }}" 
+                                <input
+                                    type="radio"
+                                    name="type"
+                                    value="{{ $type->value }}"
                                     class="peer sr-only"
-                                    {{ old('type') === $type['value'] ? 'checked' : '' }}
+                                    {{ old('type') === $type->value ? 'checked' : '' }}
                                     required
                                 >
                                 <div class="flex items-center justify-center gap-2 p-4 rounded-lg border-2 border-gray-200 peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all">
-                                    <span class="text-2xl">{{ $type['value'] === 'income' ? '📈' : '📉' }}</span>
-                                    <span class="font-medium {{ $type['value'] === 'income' ? 'text-green-600' : 'text-red-600' }}">
-                                        {{ $type['label'] }}
+                                    <span class="text-2xl">{{ $type->value === 'income' ? '📈' : '📉' }}</span>
+                                    <span class="font-medium {{ $type->value === 'income' ? 'text-green-600' : 'text-red-600' }}">
+                                        {{ $type->label() }}
                                     </span>
                                 </div>
                             </label>
                         @endforeach
                     </div>
                     @error('type')
+                        <p class="form-error">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- RT -->
+                <div>
+                    <label for="rt_id" class="form-label">RT <span class="text-red-500">*</span></label>
+                    <select
+                        id="rt_id"
+                        name="rt_id"
+                        class="form-select @error('rt_id') border-red-500 @enderror"
+                        required
+                    >
+                        <option value="">Pilih RT...</option>
+                        @foreach($rts as $rt)
+                            <option value="{{ $rt->id }}" {{ old('rt_id', $selectedRtId) == $rt->id ? 'selected' : '' }}>
+                                {{ $rt->full_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('rt_id')
                         <p class="form-error">{{ $message }}</p>
                     @enderror
                 </div>

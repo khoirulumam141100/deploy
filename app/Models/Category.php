@@ -23,6 +23,14 @@ class Category extends Model
         'color',
     ];
 
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     // ==================== RELATIONSHIPS ====================
 
     /**

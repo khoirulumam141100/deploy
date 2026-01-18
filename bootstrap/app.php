@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Middleware\AdminMiddleware;
-use App\Http\Middleware\CheckApproved;
-use App\Http\Middleware\MemberMiddleware;
+use App\Http\Middleware\ApprovedMiddleware;
+use App\Http\Middleware\WargaMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -17,8 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
         // Register custom middleware aliases
         $middleware->alias([
             'admin' => AdminMiddleware::class,
-            'member' => MemberMiddleware::class,
-            'approved' => CheckApproved::class,
+            'warga' => WargaMiddleware::class,
+            'approved' => ApprovedMiddleware::class,
+            // Legacy alias for backward compatibility
+            'member' => WargaMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

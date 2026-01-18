@@ -1,16 +1,18 @@
-<x-layouts.app :title="$title ?? 'Member Dashboard'">
+<x-layouts.app :title="$title ?? 'Dashboard Warga'">
     <div class="min-h-screen flex">
         <!-- Sidebar -->
         <aside id="sidebar"
             class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-auto transition-transform duration-300 ease-in-out">
             <!-- Logo -->
             <div class="h-16 flex items-center justify-between px-6 border-b border-gray-200">
-                <a href="{{ route('member.dashboard') }}" class="flex items-center gap-3">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo PADRP Assyukro"
-                        class="w-10 h-10 rounded-lg object-contain">
+                <a href="{{ route('warga.dashboard') }}" class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-xl flex items-center justify-center">
+                        <span class="text-xl">🏘️</span>
+                    </div>
                     <div>
-                        <div class="font-bold text-gray-900 text-sm">PADRP</div>
-                        <div class="text-xs text-gray-500">ASSYUKRO</div>
+                        <div class="font-bold text-gray-900 text-sm">KAUMAN</div>
+                        <div class="text-xs text-gray-500">Portal Warga</div>
                     </div>
                 </a>
                 <button id="close-sidebar" class="lg:hidden p-2 text-gray-500 hover:text-gray-700">
@@ -23,10 +25,10 @@
 
             <!-- Navigation -->
             <nav class="p-4 space-y-1">
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Menu</p>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Menu Utama</p>
 
-                <a href="{{ route('member.dashboard') }}"
-                    class="sidebar-link {{ request()->routeIs('member.dashboard') ? 'active' : '' }}">
+                <a href="{{ route('warga.dashboard') }}"
+                    class="sidebar-link {{ request()->routeIs('warga.dashboard') ? 'active' : '' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -34,8 +36,18 @@
                     <span>Beranda</span>
                 </a>
 
-                <a href="{{ route('member.events.index') }}"
-                    class="sidebar-link {{ request()->routeIs('member.events.*') ? 'active' : '' }}">
+                <a href="{{ route('warga.waste-bank.index') }}"
+                    class="sidebar-link {{ request()->routeIs('warga.waste-bank.*') ? 'active' : '' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    <span>Bank Sampah</span>
+
+                </a>
+
+                <a href="{{ route('warga.events.index') }}"
+                    class="sidebar-link {{ request()->routeIs('warga.events.*') ? 'active' : '' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -43,19 +55,19 @@
                     <span>Kegiatan</span>
                 </a>
 
-                <a href="{{ route('member.finance.index') }}"
-                    class="sidebar-link {{ request()->routeIs('member.finance.*') ? 'active' : '' }}">
+                <a href="{{ route('warga.finance.index') }}"
+                    class="sidebar-link {{ request()->routeIs('warga.finance.*') ? 'active' : '' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>Keuangan</span>
+                    <span>Keuangan RT</span>
                 </a>
 
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 mt-6">Akun</p>
 
-                <a href="{{ route('member.profile') }}"
-                    class="sidebar-link {{ request()->routeIs('member.profile') ? 'active' : '' }}">
+                <a href="{{ route('warga.profile') }}"
+                    class="sidebar-link {{ request()->routeIs('warga.profile') ? 'active' : '' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -75,6 +87,16 @@
                     </button>
                 </form>
             </nav>
+
+            <!-- RT Info -->
+            @if(auth()->user()->rt)
+                <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-100">
+                    <div class="bg-gradient-to-r from-green-50 to-teal-50 rounded-xl p-3">
+                        <div class="text-xs text-gray-500">Terdaftar di</div>
+                        <div class="font-semibold text-gray-900">{{ auth()->user()->rt->full_name }}</div>
+                    </div>
+                </div>
+            @endif
         </aside>
 
         <!-- Overlay for mobile -->
@@ -96,22 +118,32 @@
                 </div>
 
                 <div class="flex items-center gap-4">
+                    <!-- Waste Balance Quick View -->
+                    @if(auth()->user()->waste_balance > 0)
+                        <a href="{{ route('warga.waste-bank.index') }}"
+                            class="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg hover:bg-emerald-100 transition-colors">
+                            <span class="text-lg">♻️</span>
+                            <span class="text-sm font-medium">Rp
+                                {{ number_format((float) auth()->user()->waste_balance, 0, ',', '.') }}</span>
+                        </a>
+                    @endif
+
                     <!-- User Info -->
                     <div class="flex items-center gap-3">
                         <div
-                            class="w-8 h-8 bg-secondary-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
+                            class="w-8 h-8 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
                             {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                         </div>
                         <div class="hidden sm:block">
                             <div class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</div>
-                            <div class="text-xs text-gray-500">Anggota</div>
+                            <div class="text-xs text-gray-500">Warga {{ auth()->user()->rt?->name ?? '' }}</div>
                         </div>
                     </div>
                 </div>
             </header>
 
             <!-- Page Content -->
-            <main class="flex-1 p-6">
+            <main class="flex-1 p-6 bg-gray-50">
                 <!-- Flash Messages -->
                 @if(session('success'))
                     <div class="alert-success mb-6 animate-fade-in">
@@ -141,7 +173,7 @@
             <!-- Footer -->
             <footer class="bg-white border-t border-gray-200 px-6 py-4">
                 <p class="text-sm text-gray-500 text-center">
-                    &copy; {{ date('Y') }} PADRP ASSYUKRO. All rights reserved.
+                    &copy; {{ date('Y') }} Kauman - Dusun Kauman, Desa Deras
                 </p>
             </footer>
         </div>

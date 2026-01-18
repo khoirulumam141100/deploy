@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description"
-        content="PADRP ASSYUKRO - Platform digital untuk mengelola organisasi Persatuan Anak Daerah, Pesantren, dan Rantau secara transparan, modern, dan efisien.">
+        content="Kauman - Sistem Informasi Warga RT/RW untuk mengelola data warga, keuangan, kegiatan, dan bank sampah secara transparan dan modern.">
 
-    <title>{{ $title ?? 'PADRP ASSYUKRO' }} | PADRP ASSYUKRO</title>
+    <title>{{ $title ?? 'Beranda' }} | Kauman</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏘️</text></svg>">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\Gender;
 use App\Enums\UserRole;
 use App\Enums\UserStatus;
+use App\Models\Rt;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -18,50 +19,28 @@ class AdminSeeder extends Seeder
     {
         // Create default admin user
         User::updateOrCreate(
-            ['email' => 'admin@gmail.com'],
+            ['email' => 'admin@kauman.id'],
             [
-                'name' => 'Administrator',
+                'name' => 'Administrator Kauman',
                 'password' => Hash::make('password123'),
                 'phone' => '081234567890',
-                'address' => 'Kantor PADRP ASSYUKRO',
+                'address' => 'Kantor RT/RW Dusun Kauman',
                 'birth_date' => '1990-01-01',
                 'gender' => Gender::MALE,
                 'role' => UserRole::ADMIN,
                 'status' => UserStatus::ACTIVE,
                 'joined_at' => now(),
+                'nik' => null,
+                'rt_id' => null,
+                'rw_id' => null,
+                'residence_status' => 'tetap',
+                'occupation' => 'Administrator',
+                'waste_balance' => 0,
             ]
         );
 
-        // Create a sample member for testing
-        User::updateOrCreate(
-            ['email' => 'anggota@gmail.com'],
-            [
-                'name' => 'Anggota Demo',
-                'password' => Hash::make('password123'),
-                'phone' => '081234567891',
-                'address' => 'Jl. Contoh No. 123, Desa Contoh',
-                'birth_date' => '1995-06-15',
-                'gender' => Gender::MALE,
-                'role' => UserRole::ANGGOTA,
-                'status' => UserStatus::ACTIVE,
-                'joined_at' => now(),
-            ]
-        );
-
-        // Create a pending member for testing approval flow
-        User::updateOrCreate(
-            ['email' => 'pending@gmail.com'],
-            [
-                'name' => 'Calon Anggota',
-                'password' => Hash::make('password123'),
-                'phone' => '081234567892',
-                'address' => 'Jl. Pendaftaran No. 456, Desa Baru',
-                'birth_date' => '2000-03-20',
-                'gender' => Gender::FEMALE,
-                'role' => UserRole::ANGGOTA,
-                'status' => UserStatus::PENDING,
-                'joined_at' => null,
-            ]
-        );
+        $this->command->info('✅ Admin berhasil dibuat!');
+        $this->command->info('   Email: admin@kauman.id');
+        $this->command->info('   Password: password123');
     }
 }

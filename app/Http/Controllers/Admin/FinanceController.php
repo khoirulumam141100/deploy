@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\TransactionType;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Rt;
+use App\Models\Rw;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -14,16 +16,88 @@ class FinanceController extends Controller
     /**
      * Display finance overview.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::withCount('transactions')->get();
-        $totalBalance = Category::getTotalBalance();
-        $recentTransactions = Transaction::with(['category', 'user'])
-            ->latest('transaction_date')
-            ->take(10)
-            ->get();
+        $selectedRtId = $request->input('rt_id');
+        $selectedRwId = $request->input('rw_id');
 
-        return view('admin.finance.index', compact('categories', 'totalBalance', 'recentTransactions'));
+        // Get categories with transaction counts
+        $categories = Category::withCount('transactions')->get();
+
+        // Calculate balance based on filter
+        $totalBalance = $this->calculateBalance($selectedRtId, $selectedRwId);
+
+        // Recent transactions with optional filter
+        $recentTransactionsQuery = Transaction::with(['category', 'user', 'rt.rw'])
+            ->latest('transaction_date');
+
+        if ($selectedRtId) {
+            $recentTransactionsQuery->where('rt_id', $selectedRtId);
+        } elseif ($selectedRwId) {
+            $recentTransactionsQuery->whereHas('rt', fn($q) => $q->where('rw_id', $selectedRwId));
+        }
+
+        $recentTransactions = $recentTransactionsQuery->take(10)->get();
+
+        // RT breakdown (filtered by RW if selected)
+        $rtQuery = Rt::with('rw');
+        if ($selectedRwId) {
+            $rtQuery->where('rw_id', $selectedRwId);
+        }
+        $rtBreakdown = $rtQuery->get()->map(function ($rt) {
+            $income = Transaction::where('rt_id', $rt->id)->where('type', 'income')->sum('amount');
+            $expense = Transaction::where('rt_id', $rt->id)->where('type', 'expense')->sum('amount');
+            return [
+                'id' => $rt->id,
+                'name' => $rt->full_name,
+                'income' => $income,
+                'expense' => $expense,
+                'balance' => $income - $expense,
+                'formatted_balance' => 'Rp ' . number_format($income - $expense, 0, ',', '.'),
+            ];
+        });
+
+        // Category breakdown with balance per category
+        $categoryBreakdown = $categories->map(function ($category) use ($selectedRtId, $selectedRwId) {
+            $query = $category->transactions();
+
+            if ($selectedRtId) {
+                $query->where('rt_id', $selectedRtId);
+            } elseif ($selectedRwId) {
+                $query->whereHas('rt', fn($q) => $q->where('rw_id', $selectedRwId));
+            }
+
+            $income = (clone $query)->where('type', 'income')->sum('amount');
+            $expense = (clone $query)->where('type', 'expense')->sum('amount');
+
+            return [
+                'id' => $category->id,
+                'name' => $category->name,
+                'slug' => $category->slug,
+                'icon' => $category->icon,
+                'color' => $category->color,
+                'income' => $income,
+                'expense' => $expense,
+                'balance' => $income - $expense,
+                'formatted_balance' => 'Rp ' . number_format($income - $expense, 0, ',', '.'),
+                'transaction_count' => $category->transactions_count,
+            ];
+        });
+
+        $rws = Rw::with('rts')->get();
+        $rts = Rt::with('rw')->get();
+
+        return view('admin.finance.index', compact(
+            'categories',
+            'totalBalance',
+            'recentTransactions',
+            'rtBreakdown',
+            'categoryBreakdown',
+            'rws',
+            'rts',
+            'selectedRtId',
+            'selectedRwId'
+        ));
     }
 
     /**
@@ -31,7 +105,12 @@ class FinanceController extends Controller
      */
     public function report(Request $request)
     {
-        $query = Transaction::with(['category', 'user']);
+        $query = Transaction::with(['category', 'user', 'rt.rw']);
+
+        // Filter by RT
+        if ($request->filled('rt_id')) {
+            $query->where('rt_id', $request->rt_id);
+        }
 
         // Filter by date range
         $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
@@ -45,11 +124,14 @@ class FinanceController extends Controller
         $summary = [
             'total_income' => $transactions->where('type', TransactionType::INCOME)->sum('amount'),
             'total_expense' => $transactions->where('type', TransactionType::EXPENSE)->sum('amount'),
-            'initial_balance' => 0, // In complex apps, calculate previous balance. Assume 0 or period-based for now.
+            'initial_balance' => 0,
         ];
         $summary['net_change'] = $summary['total_income'] - $summary['total_expense'];
 
-        return view('admin.finance.report', compact('transactions', 'summary', 'startDate', 'endDate'));
+        $rts = Rt::with('rw')->get();
+        $selectedRtId = $request->rt_id;
+
+        return view('admin.finance.report', compact('transactions', 'summary', 'startDate', 'endDate', 'rts', 'selectedRtId'));
     }
 
     /**
@@ -57,7 +139,12 @@ class FinanceController extends Controller
      */
     public function category(Request $request, Category $category)
     {
-        $query = $category->transactions()->with('user');
+        $query = $category->transactions()->with(['user', 'rt.rw']);
+
+        // Filter by RT
+        if ($request->filled('rt_id')) {
+            $query->where('rt_id', $request->rt_id);
+        }
 
         // Filter by type
         if ($request->filled('type')) {
@@ -73,9 +160,10 @@ class FinanceController extends Controller
         }
 
         $transactions = $query->latest('transaction_date')->paginate(15)->withQueryString();
-        $types = TransactionType::options();
+        $types = TransactionType::cases();
+        $rts = Rt::with('rw')->get();
 
-        return view('admin.finance.category', compact('category', 'transactions', 'types'));
+        return view('admin.finance.category', compact('category', 'transactions', 'types', 'rts'));
     }
 
     /**
@@ -84,10 +172,12 @@ class FinanceController extends Controller
     public function create(Request $request)
     {
         $categories = Category::all();
-        $types = TransactionType::options();
+        $types = TransactionType::cases();
+        $rts = Rt::with('rw')->get();
         $selectedCategory = $request->category;
+        $selectedRtId = $request->rt_id;
 
-        return view('admin.finance.create', compact('categories', 'types', 'selectedCategory'));
+        return view('admin.finance.create', compact('categories', 'types', 'rts', 'selectedCategory', 'selectedRtId'));
     }
 
     /**
@@ -97,6 +187,7 @@ class FinanceController extends Controller
     {
         $validated = $request->validate([
             'category_id' => ['required', 'exists:categories,id'],
+            'rt_id' => ['required', 'exists:rts,id'],
             'type' => ['required', Rule::enum(TransactionType::class)],
             'amount' => ['required', 'numeric', 'min:0'],
             'description' => ['required', 'string'],
@@ -124,9 +215,10 @@ class FinanceController extends Controller
     public function edit(Transaction $transaction)
     {
         $categories = Category::all();
-        $types = TransactionType::options();
+        $types = TransactionType::cases();
+        $rts = Rt::with('rw')->get();
 
-        return view('admin.finance.edit', compact('transaction', 'categories', 'types'));
+        return view('admin.finance.edit', compact('transaction', 'categories', 'types', 'rts'));
     }
 
     /**
@@ -136,6 +228,7 @@ class FinanceController extends Controller
     {
         $validated = $request->validate([
             'category_id' => ['required', 'exists:categories,id'],
+            'rt_id' => ['required', 'exists:rts,id'],
             'type' => ['required', Rule::enum(TransactionType::class)],
             'amount' => ['required', 'numeric', 'min:0'],
             'description' => ['required', 'string'],
@@ -161,11 +254,29 @@ class FinanceController extends Controller
     {
         $description = "Menghapus transaksi: {$transaction->formatted_amount} ({$transaction->description})";
 
-        // Log before delete
         \App\Services\ActivityLogger::log('delete', $description, $transaction);
 
         $transaction->delete();
 
         return back()->with('success', 'Transaksi berhasil dihapus.');
+    }
+
+    /**
+     * Calculate total balance with optional RT/RW filter.
+     */
+    private function calculateBalance(?int $rtId = null, ?int $rwId = null): float
+    {
+        $query = Transaction::query();
+
+        if ($rtId) {
+            $query->where('rt_id', $rtId);
+        } elseif ($rwId) {
+            $query->whereHas('rt', fn($q) => $q->where('rw_id', $rwId));
+        }
+
+        $income = (clone $query)->where('type', 'income')->sum('amount');
+        $expense = (clone $query)->where('type', 'expense')->sum('amount');
+
+        return (float) ($income - $expense);
     }
 }

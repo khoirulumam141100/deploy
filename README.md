@@ -34,29 +34,29 @@ PADRP ASSYUKRO adalah aplikasi web berbasis Laravel yang dirancang untuk membant
 
 ### 👤 Manajemen Pengguna
 
--   **Multi-role**: Admin dan Anggota dengan hak akses berbeda
--   **Pendaftaran Online**: Calon anggota dapat mendaftar melalui website
--   **Persetujuan Keanggotaan**: Admin dapat menyetujui atau menolak pendaftaran
--   **Profil Lengkap**: Data anggota termasuk foto, alamat, dan informasi kontak
+- **Multi-role**: Admin dan Anggota dengan hak akses berbeda
+- **Pendaftaran Online**: Calon anggota dapat mendaftar melalui website
+- **Persetujuan Keanggotaan**: Admin dapat menyetujui atau menolak pendaftaran
+- **Profil Lengkap**: Data anggota termasuk foto, alamat, dan informasi kontak
 
 ### 💰 Manajemen Keuangan
 
--   **Multi-kategori**: Kas Assyukro, Rutinan Mingguan, Rutinan Bulanan, Keuangan Idul Fitri
--   **Pemasukan & Pengeluaran**: Pencatatan transaksi keuangan lengkap
--   **Laporan Transparan**: Anggota dapat melihat laporan keuangan organisasi
--   **Format Rupiah**: Tampilan nominal dengan format Indonesia (titik sebagai pemisah ribuan)
+- **Multi-kategori**: Kas Assyukro, Rutinan Mingguan, Rutinan Bulanan, Keuangan Idul Fitri
+- **Pemasukan & Pengeluaran**: Pencatatan transaksi keuangan lengkap
+- **Laporan Transparan**: Anggota dapat melihat laporan keuangan organisasi
+- **Format Rupiah**: Tampilan nominal dengan format Indonesia (titik sebagai pemisah ribuan)
 
 ### 📅 Manajemen Kegiatan
 
--   **Jadwal Kegiatan**: Pembuatan dan pengelolaan agenda organisasi
--   **Status Kegiatan**: Akan Datang, Sedang Berlangsung, Selesai
--   **Filter & Pencarian**: Kemudahan mencari kegiatan berdasarkan status
+- **Jadwal Kegiatan**: Pembuatan dan pengelolaan agenda organisasi
+- **Status Kegiatan**: Akan Datang, Sedang Berlangsung, Selesai
+- **Filter & Pencarian**: Kemudahan mencari kegiatan berdasarkan status
 
 ### 📊 Dashboard
 
--   **Statistik Real-time**: Jumlah anggota, kegiatan, dan keuangan
--   **Grafik Visual**: Visualisasi data keuangan
--   **Aktivitas Terbaru**: Log aktivitas terkini
+- **Statistik Real-time**: Jumlah anggota, kegiatan, dan keuangan
+- **Grafik Visual**: Visualisasi data keuangan
+- **Aktivitas Terbaru**: Log aktivitas terkini
 
 ---
 
@@ -76,16 +76,16 @@ Sebelum menginstal, pastikan komputer Anda memenuhi persyaratan berikut:
 
 ### Ekstensi PHP yang Diperlukan
 
--   BCMath
--   Ctype
--   Fileinfo
--   JSON
--   Mbstring
--   OpenSSL
--   PDO
--   PDO_MySQL
--   Tokenizer
--   XML
+- BCMath
+- Ctype
+- Fileinfo
+- JSON
+- Mbstring
+- OpenSSL
+- PDO
+- PDO_MySQL
+- Tokenizer
+- XML
 
 ### Cara Cek Versi
 
@@ -367,7 +367,7 @@ Pastikan MySQL server sudah berjalan:
 
 **Windows:**
 
--   Buka XAMPP Control Panel dan start MySQL
+- Buka XAMPP Control Panel dan start MySQL
 
 **macOS:**
 
@@ -440,6 +440,26 @@ Jika mengalami kendala atau membutuhkan bantuan lebih lanjut:
 Project ini dibuat untuk PADRP ASSYUKRO.
 
 ---
+
+### 👑 Administrator
+
+- **Email**: `admin@kauman.id`
+- **Password**: `password123`
+
+### 👤 Warga
+
+- **Email**: `ahmad.wijaya@gmail.com`
+- **Password**: `password123`
+- _(Atau gunakan email lain dari seed: `siti.rahayu@gmail.com`, `budi.santoso@gmail.com`, dll. Password sama.)_
+
+## 📚 Catatan Tambahan
+
+- **Fitur Toggle Password**: Icon mata tersedia di semua form input password untuk kenyamanan pengguna.
+- **Bank Sampah Warga**: Warga tidak menginput setoran sendiri. Sampah dibawa ke posko, dan Admin yang akan menginputnya ke sistem. Saldo warga akan otomatis bertambah.
+
+## � Lisensi
+
+Hak Cipta © 2026 Dusun Kauman, Desa Deras. All rights reserved.
 
 ## 🙏 Terima Kasih
 
